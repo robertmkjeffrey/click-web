@@ -1,6 +1,6 @@
 {% import 'form_macros.html.j2' as macros %}
-<div class="command-title-parents">{{ levels[1:-1]| join(' - ', attribute='command.name')|title }}</div>
-<h1 class="command-title">{{ command.name|title }}</h1>
+<div class="command-title-parents">{{ levels[1:-1]| join(' - ', attribute='command_name')|title }}</div>
+<h1 class="command-title">{{ command_name|title }}</h1>
 <div class="command-help">{{ command.html_help }}</div>
 
 <form id="inputform"
@@ -11,15 +11,15 @@
       enctype="multipart/form-data">
     {% set command_list = [] %}
     {% for level in levels %}
-        <fieldset name="{{ level.command.name }}">
+        <fieldset name="{{ level.command_name }}">
             {% if loop.index == 1 %}
                 {# do not print root command as it most likely is juse "cli" #}
                 <legend class="command-header"></legend>
             {% elif not level.fields %}
                 {# It is just a command group without any options do not create it's own section #}
-                {% do command_list.append(level.command.name) %}
+                {% do command_list.append(level.command_name) %}
             {% else %}
-                {% do command_list.append(level.command.name) %}
+                {% do command_list.append(level.command_name) %}
                 <legend class="command-header">{{ command_list | join('&ensp;') }}</legend>
                 {% do command_list.clear() %}
             {% endif %}

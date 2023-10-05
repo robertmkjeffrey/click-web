@@ -19,14 +19,15 @@ def get_form_for(command_path: str):
     return render_template('command_form.html.j2',
                            levels=levels,
                            command=levels[-1]['command'],
+                           command_name=levels[-1]['command_name'],
                            command_path=command_path)
 
 
-def _get_commands_by_path(command_path: str) -> List[Tuple[click.Context, click.Command]]:
+def _get_commands_by_path(command_path: str) -> List[Tuple[click.Context, click.Command, str]]:
     """
-    Take a (slash separated) string and generate (context, command) for each level.
+    Take a (slash separated) string and generate (context, command, command_name) for each level.
     :param command_path: "some_group/a_command"
-    :return: Return a list from root to leaf commands. each element is (Click.Context, Click.Command)
+    :return: Return a list from root to leaf commands. each element is (Click.Context, Click.Command, str)
     """
     command_path_items = command_path.split('/')
     command_name, *command_path_items = command_path_items
@@ -36,7 +37,7 @@ def _get_commands_by_path(command_path: str) -> List[Tuple[click.Context, click.
                               .format(command_name, command.name))
     result = []
     with click.Context(command, info_name=command, parent=None) as ctx:
-        result.append((ctx, command))
+        result.append((ctx, command, command_name))
         # dig down the path parts to find the leaf command
         parent_command = command
         for command_name in command_path_items:
@@ -48,24 +49,24 @@ def _get_commands_by_path(command_path: str) -> List[Tuple[click.Context, click.
             else:
                 raise CommandNotFound('Failed to find command for path "{}". Command "{}" not found. Must be one of {}'
                                       .format(command_path, command_name, parent_command.list_commands(ctx)))
-            result.append((ctx, command))
+            result.append((ctx, command, command_name))
     return result
 
 
-def _generate_form_data(ctx_and_commands: List[Tuple[click.Context, click.Command]]):
+def _generate_form_data(ctx_and_commands: List[Tuple[click.Context, click.Command, str]]):
     """
     Construct a list of contexts and commands generate a python data structure for rendering jinja form
     :return: a list of dicts
     """
     levels = []
-    for command_index, (ctx, command) in enumerate(ctx_and_commands):
+    for command_index, (ctx, command, command_name) in enumerate(ctx_and_commands):
         # force help option off, no need in web.
         command.add_help_option = False
         command.html_help = _process_help(command.help)
 
         input_fields = [get_input_field(ctx, param, command_index, param_index)
                         for param_index, param in enumerate(command.get_params(ctx))]
-        levels.append({'command': command, 'fields': input_fields})
+        levels.append({'command_name': command_name, 'command': command, 'fields': input_fields})
 
     return levels
 
