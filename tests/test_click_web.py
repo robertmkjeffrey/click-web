@@ -30,21 +30,23 @@ def test_render_command_form(cli, loaded_script_module):
 
 
 @pytest.mark.parametrize(
-    'command_path, command_name, command_help',
+    'command_path, expected_command_name, command_help',
     [
         ('cli/command-with-option-and-argument', 'command-with-option-and-argument', 'Help text'),
+        ('cli/late-registered-simple-command', 'late-registered-simple-command', 'Help text'),
+        ('cli/renamed-simple-command', 'renamed-simple-command', 'Help text'),
         ('cli/sub-group', 'sub-group', 'a sub group'),
         ('cli/sub-group/a-sub-group-command', 'a-sub-group-command', 'Help for sub_group.sub_group_command '),
     ])
 def test_command_path(cli,
                       loaded_script_module,
                       command_path,
-                      command_name,
+                      expected_command_name,
                       command_help):
     click_web._register(loaded_script_module, cli)
-    ctx, command = click_web.resources.cmd_form._get_commands_by_path(command_path)[-1]
+    ctx, command, command_name = click_web.resources.cmd_form._get_commands_by_path(command_path)[-1]
 
-    assert command.name == command_name
+    assert command_name == expected_command_name
     assert command.help == command_help
 
 

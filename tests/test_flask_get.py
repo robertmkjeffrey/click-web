@@ -6,6 +6,8 @@ def test_get_index(app, client):
     resp = client.get('/')
     assert resp.status_code == 200
     assert b'the root command' in resp.data
+    assert b'renamed-simple-command' in resp.data
+    assert b'to-be-renamed-simple-command' not in resp.data
 
 
 @pytest.mark.parametrize(
@@ -13,6 +15,16 @@ def test_get_index(app, client):
     [
 
         ('/cli/simple-no-params-command', 200, b'>Simple-No-Params-Command</',
+         [
+             '0.0.flag.bool_flag.1.checkbox.--debug'
+         ]),
+
+        ('/cli/late-registered-simple-command', 200, b'>Late-Registered-Simple-Command</',
+         [
+             '0.0.flag.bool_flag.1.checkbox.--debug'
+         ]),
+
+        ('/cli/renamed-simple-command', 200, b'>Renamed-Simple-Command</',
          [
              '0.0.flag.bool_flag.1.checkbox.--debug'
          ]),
