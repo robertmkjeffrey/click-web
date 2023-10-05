@@ -6,6 +6,8 @@ def test_get_index(app, client):
     resp = client.get('/')
     assert resp.status_code == 200
     assert b'the root command' in resp.data
+    assert b'renamed-simple-command' in resp.data
+    assert b'to-be-renamed-simple-command' not in resp.data
 
 
 @pytest.mark.parametrize(
