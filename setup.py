@@ -11,6 +11,7 @@ requirements = ["click>=8.0", "Flask>=1.1", "Jinja2>=2.11", "flask_httpauth>=3.2
 dev_requirements = [
     "pytest>=6.2",
     "flake8>=3.9",
+    "black",
     "beautifulsoup4>=4.9",
     "isort>=5.8",
     "twine>=3.4",
