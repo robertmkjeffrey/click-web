@@ -5,6 +5,7 @@ import pytest
 @pytest.fixture()
 def loaded_script_module():
     import tests.fixtures.script.a_script
+
     yield tests.fixtures.script.a_script
 
 

@@ -10,15 +10,12 @@ from click_web import create_click_web_app
 from example import example_command
 
 # just a dict with username as key and password as value
-users = {
-    'user': 'password',
-    'another_user': 'password'
-}
+users = {"user": "password", "another_user": "password"}
 
 
 def _get_password_callback(username):
     """For a username return cleartext password"""
-    app.logger.info(f'Verifying user: {username}')
+    app.logger.info(f"Verifying user: {username}")
 
     if username in users:
         return users[username]
@@ -41,10 +38,10 @@ def setup_authentication(app, get_pw_callback):
         Run before each request, relies on the fact that the decorator function @auth.login_required
         will not run this code if it fails, and if it did not stop just pass thru call by returning None
         """
-        app.logger.info(f'User: {auth.username()}')
+        app.logger.info(f"User: {auth.username()}")
         return None
 
-    app.logger.info(f'Setting up {app} to require login...')
+    app.logger.info(f"Setting up {app} to require login...")
     auth.get_password(get_pw_callback)
     app.before_request(_assert_auth_before_request)
 
@@ -53,7 +50,7 @@ def setup_authentication(app, get_pw_callback):
 app = create_click_web_app(example_command, example_command.cli)
 
 # Set this to a random key and keep it secret, example from what you get from os.urandom(12)
-app.secret_key = b'sbnh&%r%&h/nTHFdgsdfdwekfjkwsfjkhw345rnmklb4564'
+app.secret_key = b"sbnh&%r%&h/nTHFdgsdfdwekfjkwsfjkhw345rnmklb4564"
 
 # This adds authentication for all requests to flask app.
 setup_authentication(app, get_pw_callback=_get_password_callback)
