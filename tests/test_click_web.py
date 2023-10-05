@@ -33,6 +33,8 @@ def test_render_command_form(cli, loaded_script_module):
     'command_path, command_name, command_help',
     [
         ('cli/command-with-option-and-argument', 'command-with-option-and-argument', 'Help text'),
+        ('cli/late-registered-simple-command', 'late-registered-simple-command', 'Help text'),
+        ('cli/renamed-simple-command', 'renamed-simple-command', 'Help text'),
         ('cli/sub-group', 'sub-group', 'a sub group'),
         ('cli/sub-group/a-sub-group-command', 'a-sub-group-command', 'Help for sub_group.sub_group_command '),
     ])

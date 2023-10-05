@@ -14,6 +14,24 @@ def simple_no_params_command():
     click.echo("Simpel noparams command called")
 
 
+@click.command()
+def late_registered_simple_command():
+    'Help text'
+    click.echo("Late registered command called")
+
+
+cli.add_command(late_registered_simple_command)
+
+
+@click.command()
+def to_be_renamed_simple_command():
+    'Help text'
+    click.echo("Renamed simple command called")
+
+
+cli.add_command(to_be_renamed_simple_command, "renamed-simple-command")
+
+
 @cli.command()
 @click.option("--unicode-msg", type=click.Choice(['Åäö']), default='Åäö', required=True,
               help='Message with unicide chars to print.')

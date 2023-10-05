@@ -8,6 +8,18 @@ def test_exec_command(app, client):
     assert b'Simpel noparams command called' in resp.data
 
 
+def test_exec_late_registered_command(app, client):
+    resp = client.post('/cli/late-registered-simple-command')
+    assert resp.status_code == 200
+    assert b'Late registered command called' in resp.data
+
+
+def test_exec_renamed_command(app, client):
+    resp = client.post('/cli/renamed-simple-command')
+    assert resp.status_code == 200
+    assert b'Renamed simple command called' in resp.data
+
+
 def test_exec_sub_command(app, client):
     resp = client.post('/cli/sub-group/a-sub-group-command')
     assert resp.status_code == 200
