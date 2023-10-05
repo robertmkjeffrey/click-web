@@ -41,7 +41,7 @@ def test_render_command_form(cli, loaded_script_module):
         (
             "cli/sub-group/a-sub-group-command",
             "a-sub-group-command",
-            "Help for sub_group.sub_group_command ",
+            "Help for sub_group.sub_group_command",
         ),
     ],
 )
